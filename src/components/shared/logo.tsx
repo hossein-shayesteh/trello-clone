@@ -18,8 +18,8 @@ const Logo = () => {
         )}
       >
         <Image
-          src={"./trello.svg"}
-          alt={"trello logo"}
+          src={"./Taskify.svg"}
+          alt={"Taskify logo"}
           height={30}
           width={30}
         />
