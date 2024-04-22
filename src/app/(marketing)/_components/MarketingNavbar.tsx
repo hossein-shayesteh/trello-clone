@@ -2,22 +2,22 @@ import Logo from "@/src/components/shared/logo";
 import { Button } from "@/src/components/shadcn-ui/button";
 import Link from "next/link";
 
-const Navbar = () => {
+const MarketingNavbar = () => {
   return (
     <nav
       className={
-        "fixed top-0 h-14 w-full px-4 border-b shadow-sm bg-white flex items-center"
+        "fixed top-0 flex h-14 w-full items-center border-b bg-white px-4 shadow-sm"
       }
     >
       <div
         className={
-          "md:max-w-2xl mx-auto flex items-center justify-between w-full"
+          "mx-auto flex w-full items-center justify-between md:max-w-2xl"
         }
       >
         <Logo />
         <div
           className={
-            "space-x-4 md:block md:w-auto flex items-center justify-between w-full"
+            "flex w-full items-center justify-between space-x-4 md:block md:w-auto"
           }
         >
           <Button variant={"outline"} size={"sm"} asChild>
@@ -31,4 +31,4 @@ const Navbar = () => {
     </nav>
   );
 };
-export default Navbar;
+export default MarketingNavbar;

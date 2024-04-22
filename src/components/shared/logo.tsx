@@ -1,7 +1,7 @@
-import Link from "next/link";
-import Image from "next/image";
-import { Poppins } from "next/font/google";
 import { cn } from "@/src/lib/utils";
+import { Poppins } from "next/font/google";
+import Image from "next/image";
+import Link from "next/link";
 
 const poppinsFont = Poppins({
   subsets: ["latin"],
@@ -13,17 +13,12 @@ const Logo = () => {
     <Link href={"/"}>
       <div
         className={cn(
-          "hover:opacity-75 transition items-center justify-center gap-x-2 hidden md:flex",
+          "hidden items-center justify-center gap-x-2 transition hover:opacity-75 md:flex",
           poppinsFont.className,
         )}
       >
-        <Image
-          src={"./Taskify.svg"}
-          alt={"Taskify logo"}
-          height={30}
-          width={30}
-        />
-        <p className={"text-lg text-neutral-700 pb-1"}>Taskify</p>
+        <Image src={"/Trello.svg"} alt={"Trello logo"} height={30} width={30} />
+        <p className={"pb-1 text-lg text-neutral-700"}>Taskify</p>
       </div>
     </Link>
   );

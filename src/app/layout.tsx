@@ -14,8 +14,8 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   icons: [
     {
-      url: "/Taskify.svg",
-      href: "/Taskify.svg",
+      url: "/Trello.svg",
+      href: "/Trello.svg",
     },
   ],
 };
