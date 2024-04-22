@@ -32,6 +32,9 @@ const DashboardNavbar = () => {
           afterCreateOrganizationUrl={"/organization/:id"}
           afterSelectOrganizationUrl={"/organization/:id"}
           afterLeaveOrganizationUrl={"/select-org"}
+          appearance={{
+            elements: { avatarBox: { width: "1.75rem", height: "1.75rem" } },
+          }}
         />
         <UserButton afterSignOutUrl={"/"} />
       </div>
