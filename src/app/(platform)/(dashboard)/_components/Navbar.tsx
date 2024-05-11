@@ -2,15 +2,16 @@ import { Button } from "@/src/components/shadcn-ui/button";
 import Logo from "@/src/components/shared/logo";
 import { Plus } from "lucide-react";
 import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
+import MobileSidebar from "@/src/app/(platform)/(dashboard)/_components/MobileSidebar";
 
-const DashboardNavbar = () => {
+const Navbar = () => {
   return (
     <div
       className={
         "fixed top-0 z-50 flex h-14 w-full items-center border-b bg-white px-4 shadow-sm"
       }
     >
-      {/* TODO: mobile sidebar*/}
+      <MobileSidebar />
       <div className={"flex items-center gap-x-4 "}>
         <div className={"hidden md:flex"}>
           <Logo />
@@ -18,11 +19,15 @@ const DashboardNavbar = () => {
         <Button
           variant={"primary"}
           size={"sm"}
-          className={"hidden h-auto rounded-sm px-2 py-1.5 md:block"}
+          className={" hidden h-auto rounded-sm px-2 py-1.5 md:block"}
         >
           Create
         </Button>
-        <Button size={"sm"} className={"block rounded-sm md:hidden "}>
+        <Button
+          size={"sm"}
+          variant={"primary"}
+          className={"block rounded-sm md:hidden "}
+        >
           <Plus className={"h-4 w-4"} />
         </Button>
       </div>
@@ -41,4 +46,4 @@ const DashboardNavbar = () => {
     </div>
   );
 };
-export default DashboardNavbar;
+export default Navbar;

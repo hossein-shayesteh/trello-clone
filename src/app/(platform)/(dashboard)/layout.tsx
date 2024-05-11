@@ -1,10 +1,10 @@
-import DashboardNavbar from "@/src/app/(platform)/(dashboard)/_components/DashboardNavbar";
+import Navbar from "@/src/app/(platform)/(dashboard)/_components/Navbar";
 import React from "react";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className={"h-full"}>
-      <DashboardNavbar />
+      <Navbar />
       {children}
     </div>
   );
