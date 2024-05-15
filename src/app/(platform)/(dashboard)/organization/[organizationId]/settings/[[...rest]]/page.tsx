@@ -6,7 +6,7 @@ const OrganizationSettingPage = () => {
       <OrganizationProfile
         appearance={{
           elements: {
-            rootBox: { width: "100%", boxShadow: "none" },
+            rootBox: { boxShadow: "none" },
             cardBox: {
               boxShadow: "none",
               border: "1px solid #e5e5e5",
