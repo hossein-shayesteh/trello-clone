@@ -12,6 +12,7 @@ import {
   AccordionContent,
 } from "@/src/components/shadcn-ui/accordion";
 import { Button } from "@/src/components/shadcn-ui/button";
+import { Skeleton } from "@/src/components/shadcn-ui/skeleton";
 
 // Define props for the NavItem component
 interface Props {
@@ -110,3 +111,15 @@ const NavItem = ({ isActive, isExpanded, onExpand, organization }: Props) => {
 };
 
 export default NavItem;
+
+// Define a skeleton loader for the NavItem component
+NavItem.Skeleton = function SkeletonNavItems() {
+  return (
+    <div className={"flex items-center gap-x-2"}>
+      <div className={"relative h-10 w-10 shrink-0"}>
+        <Skeleton className={"absolute h-full w-full"} />
+      </div>
+      <Skeleton className={"h-10 w-full"} />
+    </div>
+  );
+};
