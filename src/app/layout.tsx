@@ -5,6 +5,7 @@ import "./globals.css";
 import { siteConfig } from "@/config/site";
 const inter = Inter({ subsets: ["latin"] });
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "@/src/components/shadcn-ui/toaster";
 
 export const metadata: Metadata = {
   title: {
@@ -28,7 +29,10 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={inter.className}>{children}</body>
+        <body className={inter.className}>
+          {children}
+          <Toaster />
+        </body>
       </html>
     </ClerkProvider>
   );
