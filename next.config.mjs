@@ -5,7 +5,12 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "img.clerk.com",
-        port:""
+        port: "",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        port: "",
       },
     ],
   },

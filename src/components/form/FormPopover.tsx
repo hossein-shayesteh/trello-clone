@@ -9,12 +9,12 @@ import {
   PopoverClose,
 } from "@/src/components/shadcn-ui/popover";
 import { useToast } from "@/src/components/shadcn-ui/use-toast";
-
 import { useAction } from "@/src/hooks/useAction";
 import { createBoard } from "@/src/lib/actions/create-board";
 import { FormInput } from "@/src/components/form/FormInput";
 import FormSubmitButton from "@/src/components/form/FormSubmitButton";
 import { Button } from "@/src/components/shadcn-ui/button";
+import FormPicker from "@/src/components/form/FormPicker";
 
 // Props for the FormPopover component
 interface FormPopoverProps {
@@ -59,6 +59,8 @@ const FormPopover = ({
 
   const onSubmit = async (formData: FormData) => {
     const title = formData.get("title") as string;
+    const image = formData.get("image") as string;
+
     // Execute the createBoard action with the form data
     await execute({ title });
   };
@@ -88,6 +90,7 @@ const FormPopover = ({
           </Button>
         </PopoverClose>
         <form className={"space-y-4"} action={onSubmit}>
+          <FormPicker id={"image"} errors={fieldErrors} />
           <div className={"space-y-4"}>
             <FormInput
               id={"title"}
