@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { useFormStatus } from "react-dom";
 import Link from "next/link";
-import Image from "next/image";
 import { Check, Loader2 } from "lucide-react";
 import { unsplash } from "@/src/lib/unsplash/unsplash";
 import { cn } from "@/src/lib/utils";
@@ -93,7 +92,7 @@ const FormPicker = ({ errors, id }: FormPickerProps) => {
               className={"hidden"}
               checked={selectedImage === image.id}
               disabled={pending}
-              value={`${image.id}|${image.urls.thumb}|${image.urls.full}|${image.links.html}|${image.user.html}`}
+              value={`${image.id}|${image.urls.thumb}|${image.urls.full}|${image.links.html}|${image.user.name}`}
             />
             <img
               src={image.urls.thumb}

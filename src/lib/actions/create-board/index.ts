@@ -9,16 +9,32 @@ import { createBoardSchema } from "@/src/lib/actions/create-board/schema";
 // Handler function for creating a board
 const handler = async (data: InputType): Promise<ReturnType> => {
   // Authenticating the user and extracting their ID
-  const { userId } = auth();
+  const { userId, orgId } = auth();
 
   // Checking if the user is unauthorized
-  if (!userId)
+  if (!userId || !orgId)
     return {
       error: "Unauthorized.", // Returning an error message if user is unauthorized
     };
 
   // Extracting title from input data
-  const { title } = data;
+  const { title, image } = data;
+
+  // Extracting date from radio button data
+  const [imageId, imageThumbUrl, imageFullUrl, imageLinkHtml, imageUserName] =
+    image.split("|");
+
+  // Handling errors if getting image fails
+  if (
+    !imageId ||
+    !imageThumbUrl ||
+    !imageFullUrl ||
+    !imageLinkHtml ||
+    !imageUserName
+  )
+    return { error: "Missing fields. Failed to create board." };
+
+  // Creating a new board
   let board;
 
   try {
@@ -26,6 +42,12 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     board = await db.board.create({
       data: {
         title,
+        orgId,
+        imageId,
+        imageThumbUrl,
+        imageFullUrl,
+        imageUserName,
+        imageLinkHtml,
       },
     });
   } catch (e) {

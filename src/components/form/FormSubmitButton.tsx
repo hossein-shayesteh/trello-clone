@@ -7,7 +7,7 @@ import { Button, ButtonProps } from "@/src/components/shadcn-ui/button";
 const FormSubmitButton = ({
   children,
   className,
-  variant,
+  variant = "primary",
   disabled,
 }: ButtonProps) => {
   const { pending } = useFormStatus(); // Destructuring pending status from useFormStatus

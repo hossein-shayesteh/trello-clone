@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { ElementRef, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { Check, X } from "lucide-react";
 import {
   Popover,
@@ -30,6 +31,11 @@ const FormPopover = ({
   side,
   sideOffset,
 }: FormPopoverProps) => {
+  const router = useRouter();
+  // Ref for closing popover
+  const closeRef = useRef<ElementRef<"button">>(null);
+
+  // hook for using toast
   const { toast } = useToast();
 
   const { fieldErrors, execute } = useAction(createBoard, {
@@ -43,6 +49,8 @@ const FormPopover = ({
           </div>
         ),
       });
+      closeRef.current?.click();
+      router.push(`/board/${data.id}`);
     },
     // Error callback
     onError: (error) => {
@@ -62,7 +70,7 @@ const FormPopover = ({
     const image = formData.get("image") as string;
 
     // Execute the createBoard action with the form data
-    await execute({ title });
+    await execute({ title, image });
   };
 
   return (
@@ -79,7 +87,7 @@ const FormPopover = ({
         >
           Create board
         </div>
-        <PopoverClose asChild>
+        <PopoverClose ref={closeRef} asChild>
           <Button
             className={
               "absolute right-2 top-2 h-auto w-auto p-2 text-neutral-600"
