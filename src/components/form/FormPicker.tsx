@@ -92,7 +92,7 @@ const FormPicker = ({ errors, id }: FormPickerProps) => {
               className={"hidden"}
               checked={selectedImage === image.id}
               disabled={pending}
-              value={`${image.id}|${image.urls.thumb}|${image.urls.full}|${image.links.html}|${image.user.name}`}
+              value={`${image.id}|${image.urls.small}|${image.urls.full}|${image.links.html}|${image.user.name}`}
             />
             <img
               src={image.urls.thumb}
