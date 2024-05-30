@@ -32,7 +32,7 @@ export const useAction = <TInput, TOutput>(
       setIsLoading(true);
       try {
         const result = await action(input); // Execute the action with input data
-        setFieldErrors(result.fieldErrors); // Set field errors if any
+        setFieldErrors(result?.fieldErrors); // Set field errors if any
 
         if (!result) return;
 
