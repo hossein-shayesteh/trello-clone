@@ -1,8 +1,8 @@
 "use server";
-import { InputType, ReturnType } from "@/src/lib/actions/create-board/types";
+import { revalidatePath } from "next/cache";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@/src/lib/database/db";
-import { revalidatePath } from "next/cache";
+import { InputType, ReturnType } from "@/src/lib/actions/create-board/types";
 import createSafeAction from "@/src/lib/actions/createSafeAction";
 import { createBoardSchema } from "@/src/lib/actions/create-board/schema";
 
