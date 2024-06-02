@@ -8,6 +8,7 @@ import { FormInput } from "@/src/components/form/FormInput";
 import { useToast } from "@/src/components/shadcn-ui/use-toast";
 import { updateList } from "@/src/lib/actions/update-list";
 import { useAction } from "@/src/hooks/useAction";
+import ListOptions from "@/src/app/(platform)/(dashboard)/board/[boardId]/_components/ListOptions";
 
 // Interface for the props expected by ListHeader component
 interface ListHeaderProps {
@@ -135,6 +136,7 @@ const ListHeader = ({ data }: ListHeaderProps) => {
           {listTitle}
         </div>
       )}
+      <ListOptions data={data} onAddCard={() => {}} />
     </div>
   );
 };
