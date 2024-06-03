@@ -1,21 +1,22 @@
 "use client";
 
 import { useState, useRef, ElementRef } from "react";
-import { useEventListener } from "usehooks-ts";
-import { Check, X } from "lucide-react";
 import { List } from "@prisma/client";
-import { FormInput } from "@/src/components/form/FormInput";
-import { useToast } from "@/src/components/shadcn-ui/use-toast";
-import { updateList } from "@/src/lib/actions/update-list";
+import { Check, X } from "lucide-react";
+import { useEventListener } from "usehooks-ts";
 import { useAction } from "@/src/hooks/useAction";
+import { updateList } from "@/src/lib/actions/update-list";
+import { useToast } from "@/src/components/shadcn-ui/use-toast";
+import { FormInput } from "@/src/components/form/FormInput";
 import ListOptions from "@/src/app/(platform)/(dashboard)/board/[boardId]/_components/ListOptions";
 
 // Interface for the props expected by ListHeader component
 interface ListHeaderProps {
   data: List;
+  onAddCard: () => void;
 }
 
-const ListHeader = ({ data }: ListHeaderProps) => {
+const ListHeader = ({ data, onAddCard }: ListHeaderProps) => {
   // State to store title
   const [listTitle, setListTitle] = useState(data.title);
 
@@ -136,7 +137,7 @@ const ListHeader = ({ data }: ListHeaderProps) => {
           {listTitle}
         </div>
       )}
-      <ListOptions data={data} onAddCard={() => {}} />
+      <ListOptions data={data} onAddCard={onAddCard} />
     </div>
   );
 };

@@ -1,17 +1,16 @@
 "use client";
 
-import { forwardRef } from "react";
+import { forwardRef, KeyboardEventHandler } from "react";
 import { useFormStatus } from "react-dom";
-import FormErrors from "@/src/components/form/FromErrors";
-import { Label } from "@/src/components/shadcn-ui/label";
-import { Input } from "@/src/components/shadcn-ui/input";
 import { cn } from "@/src/lib/utils";
+import { Textarea } from "@/src/components/shadcn-ui/textarea";
+import { Label } from "@/src/components/shadcn-ui/label";
+import FormErrors from "@/src/components/form/FromErrors";
 
-// Interface for the props expected by FormInput component
-interface FormInputProps {
+// Interface for the props expected by FormTextarea component
+interface FormTextareaProps {
   id: string;
   label?: string;
-  type?: string;
   placeHolder?: string;
   required?: boolean;
   disabled?: boolean;
@@ -19,30 +18,33 @@ interface FormInputProps {
   className?: string;
   defaultValue?: string;
   onBlur?: () => void;
+  onClick?: () => void;
+  onKeyDown?: KeyboardEventHandler<HTMLTextAreaElement> | undefined;
 }
 
-// FormInput component definition using forwardRef
-export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
+// FormTextarea component definition using forwardRef
+export const FormTextarea = forwardRef<HTMLTextAreaElement, FormTextareaProps>(
   (
     {
       id,
-      className,
-      defaultValue = "",
-      disabled,
-      errors,
       label,
-      onBlur,
       placeHolder,
       required,
-      type,
+      disabled,
+      errors,
+      className,
+      defaultValue = "",
+      onBlur,
+      onClick,
+      onKeyDown,
     },
     ref, // Forwarded ref for the input element
   ) => {
     const { pending } = useFormStatus(); // Destructuring pending status from useFormStatus
 
     return (
-      <div className={"space-y-2"}>
-        <div className={"space-y-1"}>
+      <div className={"w-full space-y-2"}>
+        <div className={"w-full space-y-1"}>
           {label && (
             <Label
               htmlFor={id}
@@ -51,17 +53,21 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
               {label}
             </Label>
           )}
-          <Input
+          <Textarea
             id={id}
-            name={id}
             ref={ref}
-            type={type}
+            name={id}
             onBlur={onBlur}
+            onClick={onClick}
+            onKeyDown={onKeyDown}
             disabled={pending || disabled} // Disable input if form is pending or disabled
             required={required}
             placeholder={placeHolder}
             defaultValue={defaultValue}
-            className={cn("h-7 px-2 py-1 text-sm", className)}
+            className={cn(
+              "resize-none shadow-sm outline-none ring-0 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0",
+              className,
+            )}
             aria-describedby={`${id}-error`}
           />
         </div>
@@ -72,4 +78,4 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
 );
 
 // Setting the display name for the FormInput component
-FormInput.displayName = "FormInput";
+FormTextarea.displayName = "FormTextarea";
