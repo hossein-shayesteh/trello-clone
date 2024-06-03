@@ -42,6 +42,7 @@ const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(
             </div>
           ),
         });
+        formRef.current?.reset();
       },
       // Error callback
       onError: (error) => {
