@@ -10,6 +10,7 @@ import { useAction } from "@/src/hooks/useAction";
 import { updateListOrder } from "@/src/lib/actions/update-list-order";
 import { Check, X } from "lucide-react";
 import { useToast } from "@/src/components/shadcn-ui/use-toast";
+import { updateCardOrder } from "@/src/lib/actions/update-card-order";
 
 // Interface for the props expected by ListContainer component
 interface ListContainerProps {
@@ -38,6 +39,32 @@ const ListContainer = ({ boardId, data }: ListContainerProps) => {
           <div className={"flex flex-row items-center "}>
             <Check className={"mr-2"} />
             List reordered
+          </div>
+        ),
+      });
+    },
+    // Error callback
+    onError: (error) => {
+      toast({
+        description: (
+          <div className={"flex flex-row items-center "}>
+            <X className={"mr-2"} />
+            {error}
+          </div>
+        ),
+      });
+    },
+  });
+
+  // Hook for executing updateCardOrder action
+  const { execute: executeUpdateCardOrder } = useAction(updateCardOrder, {
+    // Success callback
+    onSuccess: (data) => {
+      toast({
+        description: (
+          <div className={"flex flex-row items-center "}>
+            <Check className={"mr-2"} />
+            Card reordered
           </div>
         ),
       });
@@ -116,7 +143,11 @@ const ListContainer = ({ boardId, data }: ListContainerProps) => {
         });
 
         sourceList.cards = reorderedCards;
+
         setOrderedData(newOrderedData);
+
+        // Execute the server action for updating card order with the provided parameters
+        await executeUpdateCardOrder({ items: reorderedCards, boardId });
       }
       // Moving the card to a different list
       else {
@@ -136,6 +167,9 @@ const ListContainer = ({ boardId, data }: ListContainerProps) => {
         });
 
         setOrderedData(newOrderedData);
+
+        // Execute the server action for updating card order with the provided parameters
+        await executeUpdateCardOrder({ items: destinationList.cards, boardId });
       }
     }
   };
