@@ -6,6 +6,10 @@ import { ListWithCards } from "@/src/types/prisma";
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import ListForm from "@/src/app/(platform)/(dashboard)/board/[boardId]/_components/ListForm";
 import ListItem from "@/src/app/(platform)/(dashboard)/board/[boardId]/_components/ListItem";
+import { useAction } from "@/src/hooks/useAction";
+import { updateListOrder } from "@/src/lib/actions/update-list-order";
+import { Check, X } from "lucide-react";
+import { useToast } from "@/src/components/shadcn-ui/use-toast";
 
 // Interface for the props expected by ListContainer component
 interface ListContainerProps {
@@ -22,8 +26,37 @@ const ListContainer = ({ boardId, data }: ListContainerProps) => {
     setOrderedData(data);
   }, [data]);
 
+  // hook for using toast
+  const { toast } = useToast();
+
+  // Hook for executing updateListOrder action
+  const { execute: executeUpdateListOrder } = useAction(updateListOrder, {
+    // Success callback
+    onSuccess: (data) => {
+      toast({
+        description: (
+          <div className={"flex flex-row items-center "}>
+            <Check className={"mr-2"} />
+            List reordered
+          </div>
+        ),
+      });
+    },
+    // Error callback
+    onError: (error) => {
+      toast({
+        description: (
+          <div className={"flex flex-row items-center "}>
+            <X className={"mr-2"} />
+            {error}
+          </div>
+        ),
+      });
+    },
+  });
+
   // Handler for drag end event
-  const onDragEnd = (result: DropResult) => {
+  const onDragEnd = async (result: DropResult) => {
     const { destination, source, type } = result;
 
     // Exit if there's no destination
@@ -42,6 +75,9 @@ const ListContainer = ({ boardId, data }: ListContainerProps) => {
         (item, index) => ({ ...item, order: index }),
       );
       setOrderedData(items);
+
+      // Execute the server action for updating list order with the provided parameters
+      await executeUpdateListOrder({ items, boardId });
     }
 
     // Handle card reordering
