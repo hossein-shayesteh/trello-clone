@@ -32,6 +32,7 @@ const ModalHeader = ({ data }: ModalHeaderProps) => {
   const onSubmit = (formData: FormData) => {
     const title = formData.get("title");
     // Handle form submission logic here
+    console.log(title);
   };
 
   return (
@@ -49,6 +50,9 @@ const ModalHeader = ({ data }: ModalHeaderProps) => {
             }
           />
         </form>
+        <p className={"text-sm text-muted-foreground"}>
+          In list <span className={"underline"}>{title}</span>
+        </p>
       </div>
     </div>
   );
