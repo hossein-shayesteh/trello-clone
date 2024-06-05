@@ -7,6 +7,7 @@ import { useCardModal } from "@/src/hooks/useCardModal";
 import { Dialog, DialogContent } from "@/src/components/shadcn-ui/dialog";
 import ModalHeader from "@/src/components/modals/card-modal/header";
 import ModalDescription from "@/src/components/modals/card-modal/description";
+import ModalActions from "@/src/components/modals/card-modal/actions";
 
 // Component to render a modal for displaying card details
 const CardModal = () => {
@@ -36,6 +37,11 @@ const CardModal = () => {
               )}
             </div>
           </div>
+          {cardData ? (
+            <ModalActions data={cardData} />
+          ) : (
+            <ModalActions.Skeleton />
+          )}
         </div>
       </DialogContent>
     </Dialog>
