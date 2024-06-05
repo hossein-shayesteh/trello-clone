@@ -1,5 +1,6 @@
 import { Card } from "@prisma/client";
-import { Draggable, Droppable } from "@hello-pangea/dnd";
+import { Draggable } from "@hello-pangea/dnd";
+import { useCardModal } from "@/src/hooks/useCardModal";
 
 // Interface for the props expected by CardItem component
 interface CardItemProps {
@@ -9,14 +10,17 @@ interface CardItemProps {
 
 // Functional component representing an individual draggable card item
 const CardItem = ({ index, data }: CardItemProps) => {
+  const cardModal = useCardModal();
+
   return (
     <Draggable draggableId={data.id} index={index}>
       {(provided) => (
         <li
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          ref={provided.innerRef}
           role={"button"}
+          ref={provided.innerRef}
+          onClick={() => cardModal.onOpen(data.id)}
           className={
             "truncate rounded-md border-2 border-transparent bg-white px-3 py-2 text-sm shadow-sm transition hover:border-black"
           }
