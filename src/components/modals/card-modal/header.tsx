@@ -1,12 +1,16 @@
 "use client";
 
 import { ElementRef, useRef, useState } from "react";
+import { useParams } from "next/navigation";
 import { CardWithList } from "@/src/types/prisma";
-import { Layout } from "lucide-react";
+import { Check, Layout, X } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useAction } from "@/src/hooks/useAction";
+import { updateCard } from "@/src/lib/actions/update-card";
 import { FormInput } from "@/src/components/form/FormInput";
 import { Skeleton } from "@/src/components/shadcn-ui/skeleton";
-import { useQueryClient } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
+import { useToast } from "@/src/components/shadcn-ui/use-toast";
+import { router } from "next/client";
 
 // Interface for the props expected by ModalHeader component
 interface ModalHeaderProps {
@@ -17,11 +21,50 @@ interface ModalHeaderProps {
 const ModalHeader = ({ data }: ModalHeaderProps) => {
   // Initialize title state with the card's title
   const [title, setTitle] = useState(data!.title);
-  const queryClient = useQueryClient();
-  const params = useParams();
 
   // Reference to the input element
   const inputRef = useRef<ElementRef<"input">>(null);
+
+  // Accessing query client
+  const queryClient = useQueryClient();
+
+  // Accessing the parameters from the router
+  const params = useParams();
+
+  // hook for using toast
+  const { toast } = useToast();
+
+  // Hook for executing updateCard action
+  const { execute } = useAction(updateCard, {
+    // Success callback
+    onSuccess: async (data) => {
+      toast({
+        description: (
+          <div className={"flex flex-row items-center "}>
+            <Check className={"mr-2"} />
+            Renamed to &quot;{data.title}&quot;
+          </div>
+        ),
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ["card", data.id],
+      });
+
+      // Update the card title
+      setTitle(data.title);
+    },
+    // Error callback
+    onError: (error) => {
+      toast({
+        description: (
+          <div className={"flex flex-row items-center "}>
+            <X className={"mr-2"} />
+            {error}
+          </div>
+        ),
+      });
+    },
+  });
 
   // Function to handle input blur event
   const onBlur = () => {
@@ -29,10 +72,16 @@ const ModalHeader = ({ data }: ModalHeaderProps) => {
   };
 
   // Function to handle form submission
-  const onSubmit = (formData: FormData) => {
-    const title = formData.get("title");
+  const onSubmit = async (formData: FormData) => {
+    // Extract title and boardId from form data and params
+    const title = formData.get("title") as string;
+    const boardId = params.boardId as string;
+
+    // Prevent form submission if title didn't change
+    if (title === data?.title) return;
+
     // Handle form submission logic here
-    console.log(title);
+    await execute({ title, boardId, id: data!.id });
   };
 
   return (
