@@ -2,15 +2,14 @@
 
 import { ElementRef, useRef, useState } from "react";
 import { useParams } from "next/navigation";
-import { CardWithList } from "@/src/types/prisma";
 import { Check, Layout, X } from "lucide-react";
+import { CardWithList } from "@/src/types/prisma";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAction } from "@/src/hooks/useAction";
 import { updateCard } from "@/src/lib/actions/update-card";
 import { FormInput } from "@/src/components/form/FormInput";
 import { Skeleton } from "@/src/components/shadcn-ui/skeleton";
 import { useToast } from "@/src/components/shadcn-ui/use-toast";
-import { router } from "next/client";
 
 // Interface for the props expected by ModalHeader component
 interface ModalHeaderProps {
