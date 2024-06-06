@@ -37,4 +37,4 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   return { data: card };
 };
 
-export const copyCard = createSafeAction(deleteCardSchema, handler);
+export const deleteCard = createSafeAction(deleteCardSchema, handler);
