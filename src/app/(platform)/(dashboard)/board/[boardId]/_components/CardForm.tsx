@@ -38,7 +38,7 @@ const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(
           description: (
             <div className={"flex flex-row items-center "}>
               <Check className={"mr-2"} />
-              card &quot;{data.title}&quot; created;
+              card &quot;{data.title}&quot; created
             </div>
           ),
         });
