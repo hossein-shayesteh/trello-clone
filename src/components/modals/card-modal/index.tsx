@@ -2,12 +2,14 @@
 
 import { fetcher } from "@/src/lib/fetcher";
 import { useQuery } from "@tanstack/react-query";
+import { AuditLog } from "@prisma/client";
 import { CardWithList } from "@/src/types/prisma";
 import { useCardModal } from "@/src/hooks/useCardModal";
 import { Dialog, DialogContent } from "@/src/components/shadcn-ui/dialog";
 import ModalHeader from "@/src/components/modals/card-modal/header";
 import ModalDescription from "@/src/components/modals/card-modal/description";
 import ModalActions from "@/src/components/modals/card-modal/actions";
+import ModalActivity from "@/src/components/modals/card-modal/Activity";
 
 // Component to render a modal for displaying card details
 const CardModal = () => {
@@ -23,6 +25,12 @@ const CardModal = () => {
     queryFn: () => fetcher(`/api/cards/${id}`),
   });
 
+  // Fetch audit logs using React Query
+  const { data: auditLogs } = useQuery<AuditLog[]>({
+    queryKey: ["card-logs", id],
+    queryFn: () => fetcher(`/api/cards/${id}/logs`),
+  });
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className={"max-w-3xl"}>
@@ -34,6 +42,11 @@ const CardModal = () => {
                 <ModalDescription data={cardData} />
               ) : (
                 <ModalDescription.Skeleton />
+              )}
+              {cardData ? (
+                <ModalActivity data={auditLogs} />
+              ) : (
+                <ModalActivity.Skeleton />
               )}
             </div>
           </div>
