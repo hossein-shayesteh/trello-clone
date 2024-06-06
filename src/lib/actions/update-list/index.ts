@@ -1,10 +1,13 @@
 "use server";
-import { revalidatePath } from "next/cache";
+
 import { auth } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
 import { db } from "@/src/lib/database/db";
+import { ACTION, ENTITY_TYPE } from "@prisma/client";
 import { InputType, ReturnType } from "@/src/lib/actions/update-list/types";
-import createSafeAction from "@/src/lib/actions/createSafeAction";
 import { updateListSchema } from "@/src/lib/actions/update-list/schema";
+import createSafeAction from "@/src/lib/actions/createSafeAction";
+import createAuditLog from "@/src/lib/database/createAuditLog";
 
 // Handler function for updating a list
 const handler = async (data: InputType): Promise<ReturnType> => {
@@ -28,6 +31,14 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     list = await db.list.update({
       where: { id, boardId, board: { orgId } },
       data: { title },
+    });
+
+    // Create audit log entry for this action
+    await createAuditLog({
+      entityTitle: list.title,
+      entityId: list.id,
+      action: ACTION.UPDATE,
+      entityType: ENTITY_TYPE.LIST,
     });
   } catch (e) {
     // Handling errors if board update fails

@@ -1,10 +1,13 @@
 "use server";
-import { revalidatePath } from "next/cache";
+
 import { auth } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
 import { db } from "@/src/lib/database/db";
+import { ACTION, ENTITY_TYPE } from "@prisma/client";
 import { InputType, ReturnType } from "@/src/lib/actions/create-card/types";
-import createSafeAction from "@/src/lib/actions/createSafeAction";
 import { createCardSchema } from "@/src/lib/actions/create-card/schema";
+import createSafeAction from "@/src/lib/actions/createSafeAction";
+import createAuditLog from "@/src/lib/database/createAuditLog";
 
 // Handler function for creating a card
 const handler = async (data: InputType): Promise<ReturnType> => {
@@ -52,6 +55,14 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         listId,
         order: newOrder,
       },
+    });
+
+    // Create audit log entry for this action
+    await createAuditLog({
+      entityTitle: card.title,
+      entityId: card.id,
+      action: ACTION.CREATE,
+      entityType: ENTITY_TYPE.CARD,
     });
   } catch (e) {
     // Handling errors if card creation fails

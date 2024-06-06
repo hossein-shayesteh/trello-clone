@@ -1,10 +1,13 @@
 "use server";
-import { revalidatePath } from "next/cache";
+
 import { auth } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
 import { db } from "@/src/lib/database/db";
+import { ACTION, ENTITY_TYPE } from "@prisma/client";
 import { InputType, ReturnType } from "@/src/lib/actions/create-board/types";
-import createSafeAction from "@/src/lib/actions/createSafeAction";
 import { createBoardSchema } from "@/src/lib/actions/create-board/schema";
+import createSafeAction from "@/src/lib/actions/createSafeAction";
+import createAuditLog from "@/src/lib/database/createAuditLog";
 
 // Handler function for creating a board
 const handler = async (data: InputType): Promise<ReturnType> => {
@@ -49,6 +52,14 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         imageUserName,
         imageLinkHtml,
       },
+    });
+
+    // Create audit log entry for this action
+    await createAuditLog({
+      entityTitle: board.title,
+      entityId: board.id,
+      action: ACTION.CREATE,
+      entityType: ENTITY_TYPE.BOARD,
     });
   } catch (e) {
     // Handling errors if board creation fails

@@ -1,10 +1,13 @@
 "use server";
-import { revalidatePath } from "next/cache";
+
 import { auth } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
 import { db } from "@/src/lib/database/db";
-import createSafeAction from "@/src/lib/actions/createSafeAction";
-import { deleteBoardSchema } from "@/src/lib/actions/delete-board/schema";
+import { ACTION, ENTITY_TYPE } from "@prisma/client";
 import { InputType, ReturnType } from "@/src/lib/actions/delete-board/types";
+import { deleteBoardSchema } from "@/src/lib/actions/delete-board/schema";
+import createSafeAction from "@/src/lib/actions/createSafeAction";
+import createAuditLog from "@/src/lib/database/createAuditLog";
 import { redirect } from "next/navigation";
 
 // Handler function for deleting a board
@@ -27,6 +30,14 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   try {
     // Deleting the board in the database with the provided data
     board = await db.board.delete({ where: { id, orgId } });
+
+    // Create audit log entry for this action
+    await createAuditLog({
+      entityTitle: board.title,
+      entityId: board.id,
+      action: ACTION.DELETE,
+      entityType: ENTITY_TYPE.BOARD,
+    });
   } catch (e) {
     // Handling errors if board delete fails
     return { error: "Failed to delete." };

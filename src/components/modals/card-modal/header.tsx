@@ -45,8 +45,13 @@ const ModalHeader = ({ data }: ModalHeaderProps) => {
           </div>
         ),
       });
+
+      // Revalidate queries to update card data and activity log
       await queryClient.invalidateQueries({
         queryKey: ["card", data.id],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ["card-logs", data.id],
       });
 
       // Update the card title

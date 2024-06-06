@@ -1,10 +1,13 @@
 "use server";
-import { revalidatePath } from "next/cache";
+
 import { auth } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
 import { db } from "@/src/lib/database/db";
+import { ACTION, ENTITY_TYPE } from "@prisma/client";
 import { InputType, ReturnType } from "@/src/lib/actions/create-list/types";
-import createSafeAction from "@/src/lib/actions/createSafeAction";
 import { createListSchema } from "@/src/lib/actions/create-list/schema";
+import createSafeAction from "@/src/lib/actions/createSafeAction";
+import createAuditLog from "@/src/lib/database/createAuditLog";
 
 // Handler function for creating a list
 const handler = async (data: InputType): Promise<ReturnType> => {
@@ -49,6 +52,14 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         boardId,
         order: newOrder,
       },
+    });
+
+    // Create audit log entry for this action
+    await createAuditLog({
+      entityTitle: list.title,
+      entityId: list.id,
+      action: ACTION.CREATE,
+      entityType: ENTITY_TYPE.LIST,
     });
   } catch (e) {
     // Handling errors if list creation fails

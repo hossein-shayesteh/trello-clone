@@ -1,10 +1,13 @@
 "use server";
-import { revalidatePath } from "next/cache";
+
 import { auth } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
 import { db } from "@/src/lib/database/db";
-import createSafeAction from "@/src/lib/actions/createSafeAction";
+import { ACTION, ENTITY_TYPE } from "@prisma/client";
 import { InputType, ReturnType } from "@/src/lib/actions/copy-card/types";
 import { copyCardSchema } from "@/src/lib/actions/copy-card/schema";
+import createSafeAction from "@/src/lib/actions/createSafeAction";
+import createAuditLog from "@/src/lib/database/createAuditLog";
 
 // Handler function for copying a card
 const handler = async (data: InputType): Promise<ReturnType> => {
@@ -49,6 +52,14 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         order: newOrder,
         listId: cardToCopy.listId,
       },
+    });
+
+    // Create audit log entry for this action
+    await createAuditLog({
+      entityTitle: card.title,
+      entityId: card.id,
+      action: ACTION.CREATE,
+      entityType: ENTITY_TYPE.CARD,
     });
   } catch (e) {
     // Handling errors if card copy fails

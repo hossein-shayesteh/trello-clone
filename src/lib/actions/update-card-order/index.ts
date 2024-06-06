@@ -1,13 +1,14 @@
 "use server";
-import { revalidatePath } from "next/cache";
+
 import { auth } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
 import { db } from "@/src/lib/database/db";
 import {
   InputType,
   ReturnType,
 } from "@/src/lib/actions/update-card-order/types";
-import createSafeAction from "@/src/lib/actions/createSafeAction";
 import { updateCardOrderSchema } from "@/src/lib/actions/update-card-order/schema";
+import createSafeAction from "@/src/lib/actions/createSafeAction";
 
 // Handler function for updating the order of a card
 const handler = async (data: InputType): Promise<ReturnType> => {

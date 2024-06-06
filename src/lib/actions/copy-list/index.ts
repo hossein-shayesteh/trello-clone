@@ -1,10 +1,13 @@
 "use server";
-import { revalidatePath } from "next/cache";
+
 import { auth } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
 import { db } from "@/src/lib/database/db";
-import createSafeAction from "@/src/lib/actions/createSafeAction";
-import { copyListSchema } from "@/src/lib/actions/copy-list/schema";
+import { ACTION, ENTITY_TYPE } from "@prisma/client";
 import { InputType, ReturnType } from "@/src/lib/actions/copy-list/types";
+import { copyListSchema } from "@/src/lib/actions/copy-list/schema";
+import createSafeAction from "@/src/lib/actions/createSafeAction";
+import createAuditLog from "@/src/lib/database/createAuditLog";
 
 // Handler function for copying a list
 const handler = async (data: InputType): Promise<ReturnType> => {
@@ -59,6 +62,14 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         },
       },
       include: { cards: true },
+    });
+
+    // Create audit log entry for this action
+    await createAuditLog({
+      entityTitle: list.title,
+      entityId: list.id,
+      action: ACTION.CREATE,
+      entityType: ENTITY_TYPE.LIST,
     });
   } catch (e) {
     // Handling errors if list copy fails

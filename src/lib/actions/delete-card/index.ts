@@ -1,10 +1,13 @@
 "use server";
-import { revalidatePath } from "next/cache";
+
 import { auth } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
 import { db } from "@/src/lib/database/db";
-import createSafeAction from "@/src/lib/actions/createSafeAction";
+import { ACTION, ENTITY_TYPE } from "@prisma/client";
 import { InputType, ReturnType } from "@/src/lib/actions/delete-card/types";
 import { deleteCardSchema } from "@/src/lib/actions/delete-card/schema";
+import createSafeAction from "@/src/lib/actions/createSafeAction";
+import createAuditLog from "@/src/lib/database/createAuditLog";
 
 // Handler function for deleting a card
 const handler = async (data: InputType): Promise<ReturnType> => {
@@ -26,6 +29,14 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   try {
     // Deleting the card in the database with the provided data
     card = await db.card.delete({ where: { id, list: { board: { orgId } } } });
+
+    // Create audit log entry for this action
+    await createAuditLog({
+      entityTitle: card.title,
+      entityId: card.id,
+      action: ACTION.DELETE,
+      entityType: ENTITY_TYPE.CARD,
+    });
   } catch (e) {
     // Handling errors if card deletion fails
     return { error: "Failed to delete." };
