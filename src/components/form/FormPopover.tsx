@@ -16,6 +16,7 @@ import { FormInput } from "@/src/components/form/FormInput";
 import FormSubmitButton from "@/src/components/form/FormSubmitButton";
 import { Button } from "@/src/components/shadcn-ui/button";
 import FormPicker from "@/src/components/form/FormPicker";
+import { useProModal } from "@/src/hooks/useProModal";
 
 // Props for the FormPopover component
 interface FormPopoverProps {
@@ -37,6 +38,8 @@ const FormPopover = ({
 
   // hook for using toast
   const { toast } = useToast();
+
+  const proModal = useProModal();
 
   const { fieldErrors, execute } = useAction(createBoard, {
     // Success callback
@@ -62,6 +65,7 @@ const FormPopover = ({
           </div>
         ),
       });
+      proModal.onOpen();
     },
   });
 

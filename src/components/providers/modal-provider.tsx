@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import CardModal from "@/src/components/modals/card-modal";
+import ProModal from "@/src/components/modals/pro-modal";
 
 // Component to manage modal rendering on the client side
 const ModalProvider = () => {
@@ -18,6 +19,7 @@ const ModalProvider = () => {
   return (
     <>
       <CardModal />
+      <ProModal />
     </>
   );
 };

@@ -6,7 +6,7 @@ import Hint from "@/src/components/shared/Hint";
 import FormPopover from "@/src/components/form/FormPopover";
 import fetchBoards from "@/src/lib/database/fetchBoards";
 import { Skeleton } from "@/src/components/shadcn-ui/skeleton";
-import { getAvailableCount } from "@/src/lib/board-limit";
+import { getAvailableCount } from "@/src/lib/database/board-limit";
 import { MAX_FREE_BOARD } from "@/src/constant/boards";
 
 const BoardList = async () => {

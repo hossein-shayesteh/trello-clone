@@ -9,7 +9,7 @@ import { deleteBoardSchema } from "@/src/lib/actions/delete-board/schema";
 import createSafeAction from "@/src/lib/actions/createSafeAction";
 import createAuditLog from "@/src/lib/database/createAuditLog";
 import { redirect } from "next/navigation";
-import { decrementAvailableCount } from "@/src/lib/board-limit";
+import { decrementAvailableCount } from "@/src/lib/database/board-limit";
 
 // Handler function for deleting a board
 const handler = async (data: InputType): Promise<ReturnType> => {

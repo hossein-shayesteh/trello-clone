@@ -9,7 +9,7 @@ interface CardModalStore {
 
 export const useCardModal = create<CardModalStore>((set) => ({
   id: undefined,
-  isOpen: false, // Initialize the sidebar as closed by default
+  isOpen: false, // Initialize the modal as closed by default
   onOpen: (id: string) => set({ isOpen: true, id }), // Define the function to open the modal
   onClose: () => set({ isOpen: false, id: undefined }), // Define the function to close the modal
 }));

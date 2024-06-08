@@ -11,7 +11,7 @@ import createAuditLog from "@/src/lib/database/createAuditLog";
 import {
   incrementAvailableCount,
   hasAvailableCount,
-} from "@/src/lib/board-limit";
+} from "@/src/lib/database/board-limit";
 
 // Handler function for creating a board
 const handler = async (data: InputType): Promise<ReturnType> => {
