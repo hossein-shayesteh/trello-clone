@@ -68,6 +68,9 @@ const BoardTitleForm = ({ data: board }: BoardTitleFormProps) => {
     // Get the new title from the form data
     const newTitle = formData.get("title") as string;
 
+    // Don't execute the function if new title is same with the old one
+    if (newTitle === board.title) return;
+
     // Execute the function to update the board title
     await execute({ title: newTitle, id: board.id });
   };
