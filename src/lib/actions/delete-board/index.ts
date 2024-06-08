@@ -9,6 +9,7 @@ import { deleteBoardSchema } from "@/src/lib/actions/delete-board/schema";
 import createSafeAction from "@/src/lib/actions/createSafeAction";
 import createAuditLog from "@/src/lib/database/createAuditLog";
 import { redirect } from "next/navigation";
+import { decrementAvailableCount } from "@/src/lib/board-limit";
 
 // Handler function for deleting a board
 const handler = async (data: InputType): Promise<ReturnType> => {
@@ -30,6 +31,9 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   try {
     // Deleting the board in the database with the provided data
     board = await db.board.delete({ where: { id, orgId } });
+
+    // Decrement the organization limit count after successfully deleting a board
+    await decrementAvailableCount();
 
     // Create audit log entry for this action
     await createAuditLog({

@@ -8,6 +8,10 @@ import { InputType, ReturnType } from "@/src/lib/actions/create-board/types";
 import { createBoardSchema } from "@/src/lib/actions/create-board/schema";
 import createSafeAction from "@/src/lib/actions/createSafeAction";
 import createAuditLog from "@/src/lib/database/createAuditLog";
+import {
+  incrementAvailableCount,
+  hasAvailableCount,
+} from "@/src/lib/board-limit";
 
 // Handler function for creating a board
 const handler = async (data: InputType): Promise<ReturnType> => {
@@ -18,6 +22,16 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   if (!userId || !orgId)
     return {
       error: "Unauthorized.", // Returning an error message if user is unauthorized
+    };
+
+  // Check if the organization has available board counts to create a new board
+  const canCreate = await hasAvailableCount();
+
+  // If the organization has reached the limit of free boards, return an error message
+  if (!canCreate)
+    return {
+      error:
+        "You have reached your limit of free boards. Please upgrade to create more.",
     };
 
   // Extracting title from input data
@@ -53,6 +67,9 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         imageLinkHtml,
       },
     });
+
+    // Increment the organization limit count after successfully creating a new board
+    await incrementAvailableCount();
 
     // Create audit log entry for this action
     await createAuditLog({

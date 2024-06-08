@@ -6,12 +6,16 @@ import Hint from "@/src/components/shared/Hint";
 import FormPopover from "@/src/components/form/FormPopover";
 import fetchBoards from "@/src/lib/database/fetchBoards";
 import { Skeleton } from "@/src/components/shadcn-ui/skeleton";
+import { getAvailableCount } from "@/src/lib/board-limit";
+import { MAX_FREE_BOARD } from "@/src/constant/boards";
 
 const BoardList = async () => {
   const { orgId } = auth();
   if (!orgId) redirect("/select-org");
 
   const boards = await fetchBoards(orgId);
+
+  const availableCount = await getAvailableCount();
 
   return (
     <div className={"space-y-4"}>
@@ -46,7 +50,9 @@ const BoardList = async () => {
             }
           >
             <p className={"text-sm"}>Create new board</p>
-            <span className={"text-xs"}>5 remaining</span>
+            <span
+              className={"text-xs"}
+            >{`${MAX_FREE_BOARD - availableCount} remaining`}</span>
             <Hint
               description={`Free workspaces can up to 5 open boards. For unlimited boards upgrade this workspace.`}
               sideOffset={45}
