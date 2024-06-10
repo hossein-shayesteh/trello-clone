@@ -7,6 +7,7 @@ import { stripe } from "@/src/lib/stripe/stripe";
 import { InputType, ReturnType } from "@/src/lib/actions/stripe-redirect/types";
 import { StripeRedirectSchema } from "@/src/lib/actions/stripe-redirect/schema";
 import createSafeAction from "@/src/lib/actions/createSafeAction";
+import { absoluteUrl } from "@/src/lib/absolute-url";
 
 // Handler function for stripe redirect
 const handler = async (data: InputType): Promise<ReturnType> => {

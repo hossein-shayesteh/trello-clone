@@ -4,6 +4,11 @@ import Image from "next/image";
 import { Dialog, DialogContent } from "@/src/components/shadcn-ui/dialog";
 import { useProModal } from "@/src/hooks/useProModal";
 import { Button } from "@/src/components/shadcn-ui/button";
+import { useToast } from "@/src/components/shadcn-ui/use-toast";
+import { useAction } from "@/src/hooks/useAction";
+import { updateList } from "@/src/lib/actions/update-list";
+import { Check, X } from "lucide-react";
+import { stripeRedirect } from "@/src/lib/actions/stripe-redirect";
 
 // Component to render a modal for displaying card details
 const CardModal = () => {
@@ -11,6 +16,33 @@ const CardModal = () => {
   const isOpen = useProModal((state) => state.isOpen);
   const onOpen = useProModal((state) => state.onOpen);
   const onClose = useProModal((state) => state.onClose);
+
+  // hook for using toast
+  const { toast } = useToast();
+
+  // Hook for executing stripeRedirect action
+  const { execute, isLoading } = useAction(stripeRedirect, {
+    // Success callback
+    onSuccess: (data) => {
+      window.location.href = data;
+    },
+    // Error callback
+    onError: (error) => {
+      toast({
+        description: (
+          <div className={"flex flex-row items-center "}>
+            <X className={"mr-2"} />
+            {error}
+          </div>
+        ),
+      });
+    },
+  });
+
+  // Execute the stripeRedirect action
+  const onClick = async () => {
+    await execute({});
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -40,7 +72,12 @@ const CardModal = () => {
               <li>And more!</li>
             </ul>
           </div>
-          <Button variant={"primary"} className={"w-full"}>
+          <Button
+            variant={"primary"}
+            className={"w-full"}
+            onClick={onClick}
+            disabled={isLoading}
+          >
             Upgrade
           </Button>
         </div>
